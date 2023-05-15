@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/SiNanQrn/ElectricCharge/issues"
   },
-  "homepage": "https://github.com/SiNanQrn/ElectricCharge#readme"
+  "homepage": "https://github.com/SiNanQrn/ElectricCharge#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }

@@ -12,9 +12,9 @@ fs.readFile("./domo.html", "utf8", (err, res) => {
   let balance = obj.dashboard.value;
   console.log("余额:", balance);
 
-  // 表号 - electricMeter
-  let electricMeter = obj.dashboard.items[0].value.slice(0, 12);
-  console.log("表号:", electricMeter);
+  // 表号 - electricMeterNum
+  let electricMeterNum = obj.dashboard.items[0].value.slice(0, 12);
+  console.log("表号:", electricMeterNum);
 
   // 采集日期 - acquisitionTime 
   let acquisitionTime = obj.dashboard.items[1].value;
@@ -31,4 +31,12 @@ fs.readFile("./domo.html", "utf8", (err, res) => {
   // 上次缴费金额 - lastChargeAmount
   let lastChargeAmount = obj.payment.opration.replace(/[^0-9|\.]/g, '');
   console.log("上次缴费金额:", lastChargeAmount);
+
+
+
 });
+
+// 写个新增接口
+  // 创建一个服务器
+  // 
+// 查询接口？
