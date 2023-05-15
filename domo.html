@@ -24,7 +24,8 @@
       <font style="font-size:12px">该二维码仅用于电费充值，谨防非法人员以投资理财、游戏充值、兼职刷单等理由诱骗支付。</font>
     </marquee>
   </div>
-  <div id="vm_pay" v-cloak=""> <!-- 表盘显示方式 -->
+  <div id="vm_pay" v-cloak="">
+     <!-- 表盘显示方式 -->
     <div class="dashboard" v-show="dashboard.show"
       style="box-shadow: 3px 3px 10px gray; background: -webkit-linear-gradient(left, #E8E8E8, #EFEFEF); background: -o-linear-gradient(right, #EFEFEF, #E8E8E8); background: -moz-linear-gradient(right, #EFEFEF, #E8E8E8); background: linear-gradient(to right, #EFEFEF, #E8E8E8);">
       <div v-html="dashboard.title"></div>
@@ -93,19 +94,22 @@
 <script type="text/javascript">    var vm_pay = new Vue({
     el: '#vm_pay',
     data: {
-      "dashboard": { "show": true, "title": "\u5269\u4f59\u91d1\u989d \uff08\u5143\uff09", 
-      "value": 9.8, 
-      "items": [{ "title": "\u8868\u53f7",
-       "value": "211016098302 <font color=\"green\">\u5728\u7ebf<\/font>" }, 
-        { "title": "\u91c7\u96c6\u65f6\u95f4",
-         "value": "2023-05-14 17:00:20" },
-         { "title": "\u6237\u540d", 
-         "value": "6" }, 
-         { "title": "\u603b\u7535\u91cf", 
-         "value": "2076.20 kWh" }] }, 
-         "configs": [{ "name": "tq_alipay", "on": true, "show": true, "checked": false, "text": "\u652f\u4ed8\u5b9d" }, 
-         { "name": "tqpay", "on": true, "show": true, "text": "\u5fae\u4fe1\u652f\u4ed8", "checked": true }],
-          "payment": { "show": true, "time": "2023\u5e7404\u670829", "opration": "\u5145\u503c 50.00\u5143", "state": "<font color=\"green\">\u5145\u503c\u6210\u529f<\/font>", "finished": true }
+      "dashboard": { 
+        "show": true, 
+        "title": "\u5269\u4f59\u91d1\u989d \uff08\u5143\uff09", 
+        "value": 9.8, 
+        "items": [
+          { "title": "\u8868\u53f7","value": "211016098302 <font color=\"green\">\u5728\u7ebf<\/font>" }, 
+          { "title": "\u91c7\u96c6\u65f6\u95f4","value": "2023-05-14 17:00:20" },
+          { "title": "\u6237\u540d", "value": "6" }, 
+          { "title": "\u603b\u7535\u91cf", "value": "2076.20 kWh" }
+        ] 
+      }, 
+      "configs": [
+        { "name": "tq_alipay", "on": true, "show": true, "checked": false, "text": "\u652f\u4ed8\u5b9d" }, 
+        { "name": "tqpay", "on": true, "show": true, "text": "\u5fae\u4fe1\u652f\u4ed8", "checked": true }
+      ],
+      "payment": { "show": true, "time": "2023\u5e7404\u670829", "opration": "\u5145\u503c 50.00\u5143", "state": "<font color=\"green\">\u5145\u503c\u6210\u529f<\/font>", "finished": true }
     },
     methods: {
       getPaymentCheck: function (idx) {
