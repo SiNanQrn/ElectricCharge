@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 // 导入路由模块
 const router = require("./router/index");
-app.use("./api", router);
+app.use("/api", router);
 
 // 端口并启动web服务器
 app.listen(3007, () => {
