@@ -1,42 +1,29 @@
-const fs = require("fs");
-fs.readFile("./domo.html", "utf8", (err, res) => {
-  if (err) return console.log(err);
+/*
+  需求一：
+    1.定时任务：每天凌晨调用电费系统的查询接口
+    2.解析获取到html内容
+    3.调用自己的新增接口，插入数据
+    4.每周调用自己的查询接口，微信展示本周的电费数据
+  需求二：
+     1.每天凌晨调用电费系统的查询接口
+     2.当电费越仅剩5元时，微信提醒交电费
+*/
 
-  const reg = /data: ({[\s\S]*}),\n\s*methods/;
-  const matchRes = res.match(reg);
+// 导入 dayjs 插件
+const dayjs = require('dayjs')
 
-  let obj = JSON.parse(matchRes[1]);
-  // console.log("拿到数据了", obj);
+// 定义要执行的函数
+function queryElectricity() {
+  console.log("调用电费系统查询接口");
+  // 在这里调用电费系统的查询接口
+}
 
-  // 余额 - balance
-  let balance = obj.dashboard.value;
-  console.log("余额:", balance);
+// 获取当前时间
+const now = new Date();
+let currentDay = dayjs(now).format('YYYY-MM-DD') + ' 08:00:00'
+console.log("currentDay", currentDay);
 
-  // 表号 - electricMeterNum
-  let electricMeterNum = obj.dashboard.items[0].value.slice(0, 12);
-  console.log("表号:", electricMeterNum);
-
-  // 采集日期 - acquisitionTime 
-  let acquisitionTime = obj.dashboard.items[1].value;
-  console.log("采集日期:", acquisitionTime);
-
-  // 户名 - accountName
-  let accountName = obj.dashboard.items[2].value;
-  console.log("户名:", accountName);
-
-  // 上次缴费日期 - lastChargeDate
-  let lastChargeDate = obj.payment.time + '日';
-  console.log("上次缴费日期:", lastChargeDate);
-
-  // 上次缴费金额 - lastChargeAmount
-  let lastChargeAmount = obj.payment.opration.replace(/[^0-9|\.]/g, '');
-  console.log("上次缴费金额:", lastChargeAmount);
-
-
-
-});
-
-// 写个新增接口
-  // 创建一个服务器
-  // 
-// 查询接口？
+// 间隔一天执行
+// const delay = 86400000;
+// 设置定时器，在明天凌晨执行函数
+setInterval(queryElectricity, 1000);
