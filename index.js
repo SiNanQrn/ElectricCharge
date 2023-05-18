@@ -13,54 +13,83 @@
 const dayjs = require("dayjs");
 // 导入 axios 插件
 const axios = require("axios");
-// 导入 demo
-// const demo = require("./domo.js");
-// let demon = String()
-const demo = "";
+
 // 数据处理函数
 function handleData(data) {
-  const reg = /data: {([\s\S]*)},\s*methods/;
+  const reg = /data: ({[\s\S]*}),\s*methods/;
   const matchRes = data.match(reg)[1];
-  console.log(matchRes);
-  let obj = JSON.parse(matchRes[1]);
+  let obj = JSON.parse(matchRes);
 
-  // // 余额 - balance
-  // let balance = obj.dashboard.value;
-  // console.log("余额:", balance);
+  // 余额 - balance
+  let balance = obj.dashboard.value;
+  console.log("余额:", balance);
 
-  // // 表号 - electricMeterNum
-  // let electricMeterNum = obj.dashboard.items[0].value.slice(0, 12);
-  // console.log("表号:", electricMeterNum);
+  // 表号 - electricMeterNum
+  let electricMeterNum = obj.dashboard.items[0].value.slice(0, 12);
+  console.log("表号:", electricMeterNum);
 
-  // // 采集日期 - acquisitionTime
-  // let acquisitionTime = obj.dashboard.items[1].value;
-  // console.log("采集日期:", acquisitionTime);
+  // 采集日期 - acquisitionTime
+  let acquisitionTime = obj.dashboard.items[1].value;
+  console.log("采集日期:", acquisitionTime);
 
-  // // 户名 - accountName
-  // let accountName = obj.dashboard.items[2].value;
-  // console.log("户名:", accountName);
+  // 户名 - accountName
+  let accountName = obj.dashboard.items[2].value;
+  console.log("户名:", accountName);
 
-  // // 上次缴费日期 - lastChargeDate
-  // let lastChargeDate = obj.payment.time + "日";
-  // console.log("上次缴费日期:", lastChargeDate);
+  // 上次缴费日期 - lastChargeDate
+  let lastChargeDate = obj.payment.time + "日";
+  console.log("上次缴费日期:", lastChargeDate);
 
-  // // 上次缴费金额 - lastChargeAmount
-  // let lastChargeAmount = obj.payment.opration.replace(/[^0-9|\.]/g, "");
-  // console.log("上次缴费金额:", lastChargeAmount);
+  // 上次缴费金额 - lastChargeAmount
+  let lastChargeAmount = obj.payment.opration.replace(/[^0-9|\.]/g, "");
+  console.log("上次缴费金额:", lastChargeAmount);
+  return {
+    balance: balance,
+    electricMeterNum: electricMeterNum,
+    acquisitionTime: acquisitionTime,
+    accountName: accountName,
+    lastChargeDate: lastChargeDate,
+    lastChargeDate: lastChargeDate
+  }
 }
 
 // 调用电费系统查询接口
 function queryElectricity() {
-  console.log("开始调用电费系统查询接口：");
+  console.log("step1:调用电费系统查询接口：");
   axios
     .get("http://wx.tqdianbiao.com/Client/bcd7am211016098302")
     .then(function (response) {
       // console.log(response.data);
-      handleData(response.data);
+      // 处理数据
+      // let afterHandle = handleData(response.data);
+      let afterHandle = {
+        balance: 48.53,
+        electricMeterNum: '211016098302',
+        acquisitionTime: '2023-05-18 17:00:20',
+        accountName: '6',
+        lastChargeDate: '2023年05月17日'
+      }
+      console.log('afterHandle', afterHandle)
+      // 调新增接口
+      insertEleRecords(afterHandle)
+
     })
     .catch(function (error) {
       console.log(error);
     });
+}
+
+// 调用自己的新增电费记录接口
+function insertEleRecords(data) {
+  console.log("step2:调用新增电费记录接口：");
+  axios({
+    method: 'post',
+    url: 'http://127.0.0.1:3007/api/insertRecord',
+    data: data
+  }).then(function (response) {
+    console.log(response.data);
+
+  });
 }
 
 // 获取当前时间
