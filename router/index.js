@@ -8,7 +8,7 @@ const handler = require("../router_handler/index");
 // 新增电费记录
 router.post("/insertRecord", handler.insertRecord);
 
-// 查询电费记录
+// 查询电费记录()
 // router.get("/getRecord", handler.getRecord);
 
 module.exports = router;

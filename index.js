@@ -4,10 +4,9 @@
     2.解析获取到html内容
     3.调用自己的新增接口，插入数据
   需求二：
-    1.每周调用自己的查询接口，微信展示本周的电费数据
+    1.当电费越仅剩5元时，微信提醒交电费
   需求三：
-    1.每天凌晨调用电费系统的查询接口
-    2.当电费越仅剩5元时，微信提醒交电费
+    1.每周调用自己的查询接口，微信展示本周的电费数据
 */
 
 // 导入 axios 插件
@@ -19,14 +18,12 @@ const { getCurrentDate } = require("./util/timeUtil")
 // 获取当前时间
 const currentDay = getCurrentDate()
 
-
 // 调用电费系统查询接口
 function queryElectricity() {
   console.log("step1:调用电费系统查询接口：");
   axios
     .get("http://wx.tqdianbiao.com/Client/bcd7am211016098302")
     .then(function (response) {
-      // console.log(response.data);
       // 处理数据
       // let afterHandle = handleData(response.data);
       let afterHandle = {
@@ -38,12 +35,17 @@ function queryElectricity() {
         currentDay: currentDay
       }
       console.log('afterHandle', afterHandle)
-      // 调新增接口
+      // 需求一：调新增接口
       // insertEleRecords(afterHandle)
+
+      // 需求二：低量提醒缴费
+      if (afterHandle.balance <= 5) {
+        // TODO:微信提醒缴费
+      }
 
     })
     .catch(function (error) {
-      console.log(error);
+      console.log("电费系统查询接口报错,快看看吧", error);
     });
 }
 
