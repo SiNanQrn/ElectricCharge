@@ -38,7 +38,7 @@ function handleData(data) {
     acquisitionTime: acquisitionTime,
     accountName: accountName,
     lastChargeDate: lastChargeDate,
-    lastChargeDate: lastChargeDate,
+    lastChargeAmount: lastChargeAmount,
     currentDay: currentDay
   }
 }

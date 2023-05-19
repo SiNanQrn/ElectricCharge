@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // 封装 res.cc 函数
 app.use((req, res, next) => {
-  req.cc = function (err, status = 501) {
+  res.cc = function (err, status = 501) {
     res.send({ status, message: err instanceof Error ? err.message : err });
   };
   next();
