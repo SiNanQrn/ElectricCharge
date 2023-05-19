@@ -1,7 +1,7 @@
 // 导入自定义工具函数
-const { getCurrentDate } = require("./timeUtil")
+const { getEightTime } = require("./timeUtil")
 // 获取当前时间
-const currentDay = getCurrentDate()
+const currentDay = getEightTime()
 
 // 数据处理函数
 function handleData(data) {

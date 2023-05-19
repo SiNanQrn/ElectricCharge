@@ -11,14 +11,16 @@
 
 // 导入 axios 插件
 const axios = require("axios");
+// 导入 dayjs 插件
+const dayjs = require("dayjs");
 // 导入自定义工具函数
 const { handleData } = require("./util/handleDataUtil");
-const { getCurrentDate } = require("./util/timeUtil");
+const { getEightTime } = require("./util/timeUtil");
 // 导入新增方法
 const { insertRecord } = require("./router_handler/index");
 // console.log("insertRecord", insertRecord);
 // 获取当前时间
-const currentDay = getCurrentDate();
+const eightTime = getEightTime();
 
 // 调用电费系统查询接口
 function queryElectricity() {
@@ -35,7 +37,7 @@ function queryElectricity() {
       //   accountName: "6",
       //   lastChargeDate: "2023年05月17日",
       //   lastChargeAmount: "50.00",
-      //   currentDay: currentDay,
+      //   eightTime: eightTime,
       // };
       console.log("afterHandle", afterHandle);
       // 需求一：调新增接口
@@ -70,4 +72,21 @@ function insertEleRecords(data) {
 // 设置定时器，在明天凌晨执行函数
 // setInterval(queryElectricity, 100000);
 
-queryElectricity();
+// queryElectricity();
+
+// 调用自己的查询接口
+function listRecord() {
+  axios.get("http://127.0.0.1:3007/api/getRecord").then(function (response) {
+    console.log('response', response.data);
+    // TODO:微信展示账单明细
+  })
+}
+
+// 需求三：查询周电费账单
+if (dayjs().get('day') === 0) {
+  console.log('今天是周五');
+  // 调用自己的查询接口
+  this.listRecord()
+}
+console.log('eightTime', dayjs().get('day'));
+

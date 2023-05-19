@@ -9,6 +9,6 @@ const handler = require("../router_handler/index");
 router.post("/insertRecord", handler.insertRecord);
 
 // 查询电费记录()
-// router.get("/getRecord", handler.getRecord);
+router.get("/getRecord", handler.getRecord);
 
 module.exports = router;

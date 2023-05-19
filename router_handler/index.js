@@ -1,5 +1,9 @@
 // 导入 数据库操作模块
 const db = require("../db/index");
+// 导入时间工具函数
+const { getCurrent } = require("../util/timeUtil")
+let currentTime = getCurrent();
+// console.log('currentTime', currentTime);
 
 exports.insertRecord = (req, res) => {
   const listInfo = req.body;
@@ -58,3 +62,24 @@ exports.insertRecord = (req, res) => {
     );
   });
 };
+
+exports.getRecord = (req, res) => {
+  const sql = `SELECT * FROM electricList WHERE YEARWEEK(acquisitionTime) != YEARWEEK('${currentTime}')`;
+  db.query(sql, [], (err, results) => {
+    // 执行 SQL 语句失败
+    if (err) return res.cc(err);
+
+    if (results.length === 0) {
+      return res.send({
+        status: 503,
+        msg: '未查询到电费记录'
+      })
+    }
+    // 查询成功
+    return res.send({
+      status: 200,
+      msg: '查询成功',
+      data: results
+    })
+  })
+}
