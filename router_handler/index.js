@@ -1,12 +1,8 @@
 // 导入 数据库操作模块
 const db = require("../db/index");
-// 导入时间工具函数
-const { getCurrent } = require("../util/timeUtil")
-let currentTime = getCurrent();
-// console.log('currentTime', currentTime);
 
 exports.insertRecord = (req, res) => {
-  const listInfo = req.body;
+  const listInfo = req;
   console.log("listInfo", listInfo);
 
   if (
@@ -27,10 +23,10 @@ exports.insertRecord = (req, res) => {
 
     // 判断 acquisitionTime 是否被占用
     if (results.length > 0) {
-      return res.send({
-        status: 503,
-        msg: "acquisitionTime 已被占用",
-      });
+      // return res.send({
+      //   status: 503,
+      //   msg: "acquisitionTime 已被占用",
+      // });
     }
 
     // 定义插入 electricList 表格的语句
@@ -48,7 +44,7 @@ exports.insertRecord = (req, res) => {
       (err, results) => {
         // 执行 SQL 语句失败
         if (err) {
-          return res.cc(err);
+          // return res.cc(err);
         }
 
         // SQL 语句执行成功，但影响行数不为 1
@@ -57,14 +53,14 @@ exports.insertRecord = (req, res) => {
         }
 
         // 注册成功
-        res.send({ status: 200, msg: "新增记录成功" });
+        // res.send({ status: 200, msg: "新增记录成功" });
       }
     );
   });
 };
 
 exports.getRecord = (req, res) => {
-  const sql = `SELECT * FROM electricList WHERE YEARWEEK(acquisitionTime) != YEARWEEK('${currentTime}')`;
+  const sql = `SELECT * FROM electricList WHERE YEARWEEK(acquisitionTime, 1) = YEARWEEK(NOW(), 1);`;
   db.query(sql, [], (err, results) => {
     // 执行 SQL 语句失败
     if (err) return res.cc(err);
@@ -72,14 +68,14 @@ exports.getRecord = (req, res) => {
     if (results.length === 0) {
       return res.send({
         status: 503,
-        msg: '未查询到电费记录'
-      })
+        msg: "未查询到电费记录",
+      });
     }
     // 查询成功
     return res.send({
       status: 200,
-      msg: '查询成功',
-      data: results
-    })
-  })
-}
+      msg: "查询成功",
+      data: results,
+    });
+  });
+};
