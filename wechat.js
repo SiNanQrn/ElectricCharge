@@ -62,7 +62,7 @@ async function onLogin(user) {
     lastChargeDate: "2023年05月17日",
     lastChargeAmount: "50.00",
   };
-  await contact.say(msg);
+  await contact.say(JSON.stringify(msg));
   // 查询
   // getRecord().then(
   //   async (msg) => {
