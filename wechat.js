@@ -1,9 +1,9 @@
 const { WechatyBuilder, ScanStatus } = require("wechaty"); // from 'wechaty'
 
 const qrTerm = require("qrcode-terminal");
+const { getRecord } = require("./index");
 
 // 1. Declare your Bot!
-
 const options = {
   name: "ding-dong-bot",
 };
@@ -54,7 +54,18 @@ function onScan(qrcode, status) {
 async function onLogin(user) {
   console.info(`${user.name()} login`);
   const contact = await bot.Contact.find({ name: "草莓熊" });
-  await contact.say("测试");
+
+  // 查询
+  getRecord().then(
+    async (msg) => {
+      console.log("打印查询返回msg", msg);
+      // TODO:微信展示账单明细
+      await contact.say(`${msg}`);
+    },
+    (err) => {
+      console.log("打印查询返回err", err);
+    }
+  );
 }
 
 function onLogout(user) {

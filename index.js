@@ -18,13 +18,10 @@ const schedule = require("node-schedule");
 
 // 导入自定义工具函数
 const { handleData } = require("./util/handleDataUtil");
-const { getEightTime } = require("./util/timeUtil");
 // 导入新增方法
-const { insertRecord } = require("./apiMethods");
+const { insertRecord, getRecord } = require("./apiMethods");
 
-// 获取当前时间
-const eightTime = getEightTime();
-// 调用电费系统查询接口
+// 查询数据处理后，新增
 function queryElectricity() {
   console.log("step1:调用电费系统查询接口：");
   axios
@@ -35,16 +32,20 @@ function queryElectricity() {
       // let afterHandle = {
       //   balance: 48.53,
       //   electricMeterNum: "211016098302",
-      //   acquisitionTime: "2023-05-18 17:00:20",
+      //   acquisitionTime: "2023-05-22 17:00:22",
       //   accountName: "6",
       //   lastChargeDate: "2023年05月17日",
       //   lastChargeAmount: "50.00",
-      //   eightTime: eightTime,
       // };
       console.log("afterHandle", afterHandle);
       // 需求一：调新增接口
-      insertRecord(afterHandle);
-      // insertEleRecords(afterHandle);
+      insertRecord(afterHandle)
+        .then((msg) => {
+          console.log("打印新增方法msg", msg);
+        })
+        .catch((err) => {
+          console.log("打印新增方法err", err);
+        });
 
       // 需求二：低量提醒缴费
       if (afterHandle.balance <= 5) {
@@ -56,36 +57,34 @@ function queryElectricity() {
     });
 }
 
-queryElectricity();
+// queryElectricity();
+// 查询
+// getRecord().then(
+//   (msg) => {
+//     console.log("打印查询返回msg", msg);
+//     // TODO:微信展示账单明细
+//   },
+//   (err) => {
+//     console.log("打印查询返回err", err);
+//   }
+// );
 
-// 调用自己的新增电费记录接口
-function insertEleRecords(data) {
-  console.log("step2:调用新增电费记录接口：");
-  axios({
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    method: "post",
-    url: "http://127.0.0.1:3007/api/insertRecord",
-    data: data,
-  }).then(function (response) {
-    console.log(response.data);
-  });
-}
-
-// 每周日8点获取本周电费账单
+// 每天8点，查询电费账单，插入数据库
 schedule.scheduleJob({ hour: 8, minute: 0, dayOfWeek: 0 }, queryElectricity);
-
-// 调用自己的查询接口
-function listRecord() {
-  axios.get("http://127.0.0.1:3007/api/getRecord").then(function (response) {
-    console.log("response", response.data);
-    // TODO:微信展示账单明细
-  });
-}
 
 // 需求三：查询周电费账单
 if (dayjs().get("day") === 0) {
   console.log("今天是周日");
   // 调用自己的查询接口
-  // listRecord();
+  getRecord().then(
+    (msg) => {
+      console.log("打印查询返回msg", msg);
+      // TODO:微信展示账单明细
+    },
+    (err) => {
+      console.log("打印查询返回err", err);
+    }
+  );
 }
-console.log("eightTime", dayjs().get("day"));
+
+module.exports = { queryElectricity, getRecord };
