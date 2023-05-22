@@ -14,8 +14,6 @@ const axios = require("axios");
 const { handleData } = require("./util/handleDataUtil");
 // 导入新增方法
 const { insertRecord } = require("./apiMethods");
-// 导入 node-schedule 插件
-const schedule = require("node-schedule");
 
 // 查询数据处理后，新增
 function queryElectricity() {

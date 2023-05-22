@@ -57,9 +57,7 @@ function onScan(qrcode, status) {
 async function onLogin(user) {
   console.info(`${user.name()} login`);
   const contact = await bot.Contact.find({ name: "草莓熊" });
-  // 周日8点，查询周电费账单
-  schedule.scheduleJob(
-    { hour: 8, minute: 0, dayOfWeek: 0 },
+  function weekSearch() {
     getRecord().then(
       async (msg) => {
         // console.log("打印查询返回msg", msg.data);
@@ -72,21 +70,24 @@ async function onLogin(user) {
       (err) => {
         console.log("打印查询返回err", err);
       }
-    )
-  );
+    );
+  }
+  // 周日8点，查询周电费账单
+  schedule.scheduleJob({ hour: 8, minute: 30, dayOfWeek: 0 }, weekSearch);
 
-  // 每天8点查询电费账单，插入数据库
-  let rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
-  rule.hour = 8;
-  rule.minute = 0;
-  schedule.scheduleJob(rule, async function () {
+  async function daySearch() {
     let str = queryElectricity();
     // 如果触发低量，则微信提醒
     if (str !== undefined) {
       await contact.say(str);
     }
-  });
+  }
+  // 每天8点查询电费账单，插入数据库
+  let rule = new schedule.RecurrenceRule();
+  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+  rule.hour = 8;
+  rule.minute = 30;
+  schedule.scheduleJob(rule, daySearch);
 }
 
 function onLogout(user) {
