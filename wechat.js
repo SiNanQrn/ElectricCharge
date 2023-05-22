@@ -75,14 +75,14 @@ async function onLogin(user) {
     )
   );
 
-  // 每天8点，查询电费账单，插入数据库
+  // 每天8点查询电费账单，插入数据库
   let rule = new schedule.RecurrenceRule();
   rule.dayOfWeek = [0, new schedule.Range(0, 6)];
   rule.hour = 8;
   rule.minute = 0;
   schedule.scheduleJob(rule, async function () {
     let str = queryElectricity();
-    // 如果触发低量，则提醒
+    // 如果触发低量，则微信提醒
     if (str !== undefined) {
       await contact.say(str);
     }
