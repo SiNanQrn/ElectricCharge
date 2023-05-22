@@ -2,7 +2,7 @@
 const db = require("../db/index");
 
 exports.insertRecord = (req, res) => {
-  const listInfo = req;
+  const listInfo = req.body;
   console.log("listInfo", listInfo);
 
   if (

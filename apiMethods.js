@@ -1,7 +1,7 @@
 // 导入 数据库操作模块
 const db = require("./db/index");
 
-exports.insertRecord = (req, res) => {
+exports.insertRecord = (req) => {
   console.log("req", req);
 
   if (
