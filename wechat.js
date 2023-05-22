@@ -54,18 +54,27 @@ function onScan(qrcode, status) {
 async function onLogin(user) {
   console.info(`${user.name()} login`);
   const contact = await bot.Contact.find({ name: "草莓熊" });
-
+  let msg = {
+    balance: 48.53,
+    electricMeterNum: "211016098302",
+    acquisitionTime: "2023-05-22 17:00:22",
+    accountName: "6",
+    lastChargeDate: "2023年05月17日",
+    lastChargeAmount: "50.00",
+  };
+  await contact.say(msg);
   // 查询
-  getRecord().then(
-    async (msg) => {
-      console.log("打印查询返回msg", msg);
-      // TODO:微信展示账单明细
-      await contact.say(`${msg}`);
-    },
-    (err) => {
-      console.log("打印查询返回err", err);
-    }
-  );
+  // getRecord().then(
+  //   async (msg) => {
+  //     console.log("打印查询返回msg", msg);
+  //     // TODO:微信展示账单明细
+
+  //     await contact.say(`${msg}`);
+  //   },
+  //   (err) => {
+  //     console.log("打印查询返回err", err);
+  //   }
+  // );
 }
 
 function onLogout(user) {
