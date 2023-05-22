@@ -1,5 +1,5 @@
 // 导入 数据库操作模块
-const db = require("../db/index");
+const db = require("../../db/index");
 
 exports.insertRecord = (req, res) => {
   const listInfo = req.body;

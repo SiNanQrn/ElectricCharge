@@ -5,7 +5,7 @@ const { getRecord } = require("./index");
 
 // 1. Declare your Bot!
 const options = {
-  name: "ding-dong-bot",
+  name: "si-nan-bot",
 };
 
 const bot = WechatyBuilder.build(options);
