@@ -1,7 +1,10 @@
 const { WechatyBuilder, ScanStatus } = require("wechaty"); // from 'wechaty'
 
 const qrTerm = require("qrcode-terminal");
-const { getRecord } = require("./index");
+const { getRecord } = require("./apiMethods");
+const { queryElectricity } = require("./index");
+// 导入 node-schedule 插件
+const schedule = require("node-schedule");
 
 // 1. Declare your Bot!
 const options = {
@@ -54,27 +57,36 @@ function onScan(qrcode, status) {
 async function onLogin(user) {
   console.info(`${user.name()} login`);
   const contact = await bot.Contact.find({ name: "草莓熊" });
-  let msg = {
-    balance: 48.53,
-    electricMeterNum: "211016098302",
-    acquisitionTime: "2023-05-22 17:00:22",
-    accountName: "6",
-    lastChargeDate: "2023年05月17日",
-    lastChargeAmount: "50.00",
-  };
-  await contact.say(JSON.stringify(msg));
-  // 查询
-  // getRecord().then(
-  //   async (msg) => {
-  //     console.log("打印查询返回msg", msg);
-  //     // TODO:微信展示账单明细
+  // 周日8点，查询周电费账单
+  schedule.scheduleJob(
+    { hour: 8, minute: 0, dayOfWeek: 0 },
+    getRecord().then(
+      async (msg) => {
+        // console.log("打印查询返回msg", msg.data);
+        let str = "";
+        msg.data.forEach((o, index) => {
+          str += `-----------电费账单(${index})----------\n电费余额: ${o.balance}元\n电表号: ${o.electricMeterNum}\n采集时间: ${o.acquisitionTime}\n电表号: ${o.accountName}\n上次缴费时间: ${o.lastChargeDate}\n上次缴费金额: ${o.lastChargeAmount}元\n---------------------------------\n`;
+        });
+        await contact.say(str.trim());
+      },
+      (err) => {
+        console.log("打印查询返回err", err);
+      }
+    )
+  );
 
-  //     await contact.say(`${msg}`);
-  //   },
-  //   (err) => {
-  //     console.log("打印查询返回err", err);
-  //   }
-  // );
+  // 每天8点，查询电费账单，插入数据库
+  let rule = new schedule.RecurrenceRule();
+  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+  rule.hour = 8;
+  rule.minute = 0;
+  schedule.scheduleJob(rule, async function () {
+    let str = queryElectricity();
+    // 如果触发低量，则提醒
+    if (str !== undefined) {
+      await contact.say(str);
+    }
+  });
 }
 
 function onLogout(user) {
