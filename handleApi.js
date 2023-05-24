@@ -16,16 +16,17 @@ const { handleData } = require("./util/handleDataUtil");
 const { insertRecord } = require("./apiMethods");
 
 // 查询数据处理后，新增
-function queryElectricity() {
+async function queryElectricity() {
   console.log("step1:调用电费系统查询接口：");
-  axios
+  let reminderStr = null;
+  await axios
     .get("http://wx.tqdianbiao.com/Client/bcd7am211016098302")
-    .then(function (response) {
+    .then(async function (response) {
       // 处理数据
       let afterHandle = handleData(response.data);
       // console.log("afterHandle", afterHandle);
       // 需求一：调新增接口
-      insertRecord(afterHandle)
+      await insertRecord(afterHandle)
         .then((msg) => {
           console.log("打印新增方法msg", msg);
         })
@@ -35,12 +36,13 @@ function queryElectricity() {
 
       // 需求二：低量提醒缴费
       if (afterHandle.balance <= 5) {
-        return "思南,请注意电费不足5大洋,记得缴费";
+        reminderStr = "思南,请注意电费不足5大洋,记得缴费！";
       }
     })
     .catch(function (error) {
       console.log("电费系统查询接口报错,快看看吧", error);
     });
+  return reminderStr;
 }
 
 module.exports = { queryElectricity };
