@@ -105,7 +105,7 @@ function weekSearch() {
   );
 }
 // 周日8点，查询周电费账单
-schedule.scheduleJob({ hour: 12, minute: 37, dayOfWeek: 0 }, weekSearch);
+schedule.scheduleJob({ hour: 10, minute: 0, dayOfWeek: 0 }, weekSearch);
 
 async function daySearch() {
   let str = await queryElectricity();
