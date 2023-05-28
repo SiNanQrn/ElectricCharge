@@ -133,3 +133,5 @@ function sendMail() {
     console.log("mail sent:", info.response);
   });
 }
+
+queryElectricity();
