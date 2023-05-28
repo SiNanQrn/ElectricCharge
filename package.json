@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pm2:stop": "pm2 stop electriccharge && pm2 delete electriccharge",
+    "pm2:start": "pm2 start index.js"
   },
   "repository": {
     "type": "git",
