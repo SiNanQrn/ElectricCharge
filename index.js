@@ -30,6 +30,8 @@ const mail = {
 };
 
 function weekSearch() {
+  console.log("开始查询周账单");
+
   getRecord().then(
     async (msg) => {
       // console.log("打印查询返回msg", msg.data);
@@ -93,16 +95,17 @@ function weekSearch() {
       </tr>` +
         str +
         "</table>";
+      console.log("开始发送邮件");
       //  发送邮件
       sendMail();
     },
     (err) => {
-      console.log("打印查询返回err", err);
+      console.log("打印周账单查询返回err", err);
     }
   );
 }
 // 周日8点，查询周电费账单
-schedule.scheduleJob({ hour: 8, minute: 30, dayOfWeek: 0 }, weekSearch);
+schedule.scheduleJob({ hour: 12, minute: 37, dayOfWeek: 0 }, weekSearch);
 
 async function daySearch() {
   let str = await queryElectricity();
