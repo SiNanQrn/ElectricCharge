@@ -34,65 +34,65 @@ function weekSearch() {
 
   getRecord().then(
     async (msg) => {
-      // console.log("打印查询返回msg", msg.data);
+      console.log("打印查询周账单返回msg.data", msg.data);
       let str = "";
       msg.data.forEach((o) => {
         str += `<tr>
-          <td>${o.electricMeterNum}</td>
-          <td>${o.accountName}</td>
-          <td>${o.balance}</td>
-          <td>${o.acquisitionTime}</td>
-          <td>${o.lastChargeDate}</td>
-          <td>${o.lastChargeAmount}</td>
-        </tr>`;
+            <td>${o.electricMeterNum}</td>
+            <td>${o.accountName}</td>
+            <td>${o.balance}</td>
+            <td>${o.acquisitionTime}</td>
+            <td>${o.lastChargeDate}</td>
+            <td>${o.lastChargeAmount}</td>
+          </tr>`;
       });
       mail.html =
         `<style>
-      td,
-      th {
-        border: 1px solid rgb(190, 190, 190);
-        padding: 10px;
-      }
-    
-      td {
-        text-align: center;
-        white-space: nowrap;
-      }
-    
-      tr:nth-child(even) {
-        background-color: #eee;
-      }
-    
-      th[scope="col"] {
-        background-color: #696969;
-        color: #fff;
-      }
-    
-      th[scope="row"] {
-        background-color: #d7d9f2;
-      }
-    
-      table {
-        border-collapse: collapse;
-        border: 2px solid rgb(200, 200, 200);
-        letter-spacing: 1px;
-        font-family: sans-serif;
-        font-size: 0.8rem;
-      }
-    </style>
-    
-    <table>
-      <caption>
-        <h3>本周电费账单</h3>
-      </caption>
-      <tr>
-        <th scope="col">电表号</th>
-        <th scope="col">账号</th>
-        <th scope="col">电费余额</th>
-        <th scope="col">采集时间</th>
-        <th scope="col">上次缴费时间</th>
-        <th scope="col">上次缴费金额</th>
-      </tr>` +
+        td,
+        th {
+          border: 1px solid rgb(190, 190, 190);
+          padding: 10px;
+        }
+
+        td {
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        tr:nth-child(even) {
+          background-color: #eee;
+        }
+
+        th[scope="col"] {
+          background-color: #696969;
+          color: #fff;
+        }
+
+        th[scope="row"] {
+          background-color: #d7d9f2;
+        }
+
+        table {
+          border-collapse: collapse;
+          border: 2px solid rgb(200, 200, 200);
+          letter-spacing: 1px;
+          font-family: sans-serif;
+          font-size: 0.8rem;
+        }
+      </style>
+      
+      <table>
+        <caption>
+          <h3>本周电费账单</h3>
+        </caption>
+        <tr>
+          <th scope="col">电表号</th>
+          <th scope="col">账号</th>
+          <th scope="col">电费余额</th>
+          <th scope="col">采集时间</th>
+          <th scope="col">上次缴费时间</th>
+          <th scope="col">上次缴费金额</th>
+        </tr>` +
         str +
         "</table>";
       console.log("开始发送邮件");

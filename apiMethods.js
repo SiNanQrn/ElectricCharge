@@ -64,6 +64,9 @@ exports.getRecord = () => {
   return new Promise((resolve, reject) => {
     const sql = `SELECT * FROM electricList WHERE YEARWEEK(acquisitionTime, 1) = YEARWEEK(NOW(), 1);`;
     db.query(sql, [], (err, results) => {
+      results.sort(
+        (a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)
+      );
       // 执行 SQL 语句失败
       if (err) return reject(err);
 
